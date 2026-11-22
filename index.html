@@ -136,7 +136,11 @@ section{position:relative}
 .credits dt{font:400 12px/1.8 var(--label);letter-spacing:.12em;text-transform:uppercase;color:#BFA68E}
 .credits dd{margin:0;font-weight:600}
 .player{position:relative;justify-self:center;width:min(420px,100%);aspect-ratio:9/16;border-radius:28px;overflow:hidden;background:#000;box-shadow:0 0 0 6px var(--choc-2),0 0 0 9px var(--gold),0 40px 80px rgba(0,0,0,.55)}
-.player video{width:100%;height:100%;object-fit:cover}
+.player video{width:100%;height:100%;object-fit:contain;background:#000}
+/* full screen: show the whole 9:16 video with bars at the sides, never cropped */
+.player video:fullscreen{width:100vw;height:100vh;object-fit:contain;background:#000}
+.player video:-webkit-full-screen{width:100vw;height:100vh;object-fit:contain;background:#000}
+.player:fullscreen video{object-fit:contain;background:#000}
 .player .play{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(180deg,rgba(0,0,0,0) 50%,rgba(0,0,0,.45));border:0;cursor:pointer;color:var(--ink)}
 .player .play b{width:96px;height:96px;border-radius:50%;background:var(--gold);display:grid;place-items:center;box-shadow:0 12px 30px rgba(0,0,0,.4);transition:transform .25s}
 .player .play:hover b{transform:scale(1.08)}
@@ -387,7 +391,7 @@ const M=[
  {id:"sugar_dollar",name:"Sugar Dollar",animal:"The Bear",role:"Rapper",c:"#FF4FA3",d:"#B71C64",flavor:"Milk chocolate",signature:"Dollar-and-sugar-cube chain",
   blurb:"The face of the shop. Full diamond grill, backwards cap and a chain made of dollar signs and sugar cubes.",w:700},
  {id:"sweet_money",name:"Sweet Money",animal:"The Wolf",role:"Singer",c:"#39C3FF",d:"#0B6FA8",flavor:"Blue raspberry ice",signature:"White-gold Cuban link",
-  blurb:"Hype man turned headliner. Grey fur, chrome runners and a white-gold Cuban that never comes off.",w:775},
+  blurb:"The smoothest voice in the shop. Grey fur, chrome runners and a white-gold Cuban that never comes off.",w:775},
  {id:"candy_cash",name:"Candy Cash",animal:"The Bunny",role:"Singer",c:"#FFD23F",d:"#C99300",flavor:"Cherry",signature:"Candy-apple red, head to toe",
   blurb:"Candy-apple red from the puffer to the thigh-high boots. The sweetest voice in the shop.",w:603},
  {id:"muva_mula",name:"Muva Mula",animal:"The Jaguar",role:"Rapper",c:"#FF8A1F",d:"#B4500A",flavor:"Mango chili",signature:"Denim on denim",
@@ -469,6 +473,7 @@ st.addEventListener("mouseenter",()=>clearInterval(timer));st.addEventListener("
 setStatic(0);restart();
 
 /* intro + idle float */
+if(!reduce)gsap.defaults({overwrite:"auto"});
 if(!reduce){
   gsap.from("#giant span span",{yPercent:110,opacity:0,duration:.8,stagger:.035,ease:"back.out(1.6)",delay:.1});
   gsap.from("#figure",{y:120,opacity:0,scale:.9,duration:1,ease:"back.out(1.3)",delay:.25});
@@ -480,10 +485,9 @@ if(!reduce){
 if(!reduce&&window.ScrollTrigger){
   gsap.registerPlugin(ScrollTrigger);
   gsap.to("#giant",{yPercent:35,ease:"none",scrollTrigger:{trigger:".stage",start:"top top",end:"bottom top",scrub:true}});
-  gsap.to("#figure",{y:-80,ease:"none",scrollTrigger:{trigger:".stage",start:"top top",end:"bottom top",scrub:true}});
   gsap.fromTo("#player",{rotation:-9,y:60,scale:.9},{rotation:0,y:0,scale:1,ease:"none",scrollTrigger:{trigger:".video",start:"top 85%",end:"center 55%",scrub:.6}});
   gsap.fromTo(".video .copy > *",{y:40},{y:0,stagger:.08,ease:"power2.out",scrollTrigger:{trigger:".video",start:"top 80%",end:"top 35%",scrub:.6}});
-  gsap.fromTo(".box",{y:90,rotationX:24,transformPerspective:900},{y:0,rotationX:0,stagger:.08,ease:"power2.out",scrollTrigger:{trigger:".shelf",start:"top 92%",end:"top 45%",scrub:.6}});
+  gsap.from(".box",{y:70,rotationX:18,transformPerspective:900,stagger:.08,duration:.8,ease:"power3.out",scrollTrigger:{trigger:".shelf",start:"top 88%",once:true}});
   gsap.fromTo(".drop .machine",{y:-120,rotation:-8},{y:0,rotation:0,ease:"bounce.out",scrollTrigger:{trigger:".drop",start:"top 85%",end:"top 30%",scrub:.8}});
 }
 
