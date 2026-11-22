@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Candy Shop</title>
+<meta name="description" content="The Candy Shop: Sugar Dollar, Sweet Money, Candy Cash, Muva Mula and Cha-Ching. Watch Keep a Business Name and get first access to every drop.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Archivo:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a toy-shop window. One member per slide on a candy-colored stage, giant name behind the figure, then a dark chocolate store interior below. */
+:root{
+  --choc:#1B0F0A;        /* store interior */
+  --choc-2:#2A1810;      /* raised surfaces */
+  --cream:#FFF4E6;       /* text on dark */
+  --gold:#FFD24A;        /* money accent */
+  --pink:#FF4FA3;        /* candy accent */
+  --ink:#140A06;         /* text on candy colors */
+  --stage:#FF4FA3;       /* current slide color, set by script */
+  --stage-deep:#C2246E;
+  --display:"Anton","Impact","Arial Narrow",sans-serif;
+  --label:"Archivo Black","Arial Black",sans-serif;
+  --body:"Archivo","Helvetica Neue",Arial,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--choc);color:var(--cream);font:400 17px/1.55 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,video{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
+h1,h2,h3{text-wrap:balance;margin:0}
+/* custom scrollbar: candy stripe thumb on chocolate */
+html{scrollbar-color:var(--pink) var(--choc);scrollbar-width:thin}
+::-webkit-scrollbar{width:12px;height:12px}
+::-webkit-scrollbar-track{background:var(--choc)}
+::-webkit-scrollbar-thumb{border:3px solid var(--choc);border-radius:20px;background:repeating-linear-gradient(135deg,var(--pink) 0 8px,#FFFFFF 8px 14px)}
+::-webkit-scrollbar-thumb:hover{background:repeating-linear-gradient(135deg,var(--gold) 0 8px,#FFFFFF 8px 14px)}
+::selection{background:var(--gold);color:var(--ink)}
+
+/* ---------- nav ---------- */
+.nav{position:absolute;inset:0 0 auto 0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px clamp(16px,3.4vw,48px)}
+.nav .brand img{width:clamp(150px,15vw,210px);height:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.25))}
+.nav ul{list-style:none;display:flex;gap:clamp(14px,2.4vw,34px);margin:0;padding:0}
+.nav ul a{font:400 14px/1 var(--label);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--ink)}
+.nav ul a:hover{text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:3px}
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:46px;padding:0 22px;border-radius:999px;font:400 14px/1 var(--label);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;border:0;cursor:pointer}
+.btn svg{width:18px;height:18px}
+.btn-ink{background:var(--ink);color:var(--cream)}
+.btn-ink:hover{background:#000}
+.btn-gold{background:var(--gold);color:var(--ink)}
+.btn-gold:hover{background:#FFE07A}
+
+/* ---------- hero stage ---------- */
+.stage{position:relative;height:clamp(640px,100svh,1000px);background:var(--stage);overflow:hidden;color:var(--ink);isolation:isolate}
+.stage::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(70% 55% at 50% 62%,rgba(255,255,255,.28),rgba(255,255,255,0) 70%),radial-gradient(120% 80% at 50% 120%,var(--stage-deep),transparent 60%)}
+.stage .floor{position:absolute;left:0;right:0;bottom:0;height:18%;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.14))}
+.giant{position:absolute;left:0;right:0;top:clamp(92px,13vh,150px);z-index:1;text-align:center;font:400 clamp(84px,16.8vw,262px)/.86 var(--display);letter-spacing:-.005em;color:#fff;text-transform:uppercase;white-space:nowrap;pointer-events:none;user-select:none}
+.giant span{display:inline-block;will-change:transform}
+.giant .sp{width:.22em}
+.figure{position:absolute;left:0;right:0;bottom:-2%;z-index:3;height:min(84%,880px);display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
+.figure img{height:100%;width:auto;max-width:none;filter:drop-shadow(0 30px 40px rgba(0,0,0,.28))}
+.shadow{position:absolute;left:50%;bottom:1.6%;width:min(36vw,420px);height:34px;transform:translateX(-50%);z-index:2;background:radial-gradient(closest-side,rgba(0,0,0,.32),rgba(0,0,0,0));}
+.mini{position:absolute;bottom:9%;z-index:2;height:min(26%,250px);background:none;border:0;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--ink)}
+.mini img{height:100%;width:auto;max-width:none;filter:drop-shadow(0 12px 14px rgba(0,0,0,.22));transition:transform .3s}
+.mini:hover img{transform:translateY(-8px) rotate(-3deg)}
+.mini span{font:400 12px/1 var(--label);letter-spacing:.08em;text-transform:uppercase;opacity:.75}
+.mini.prev{left:calc(clamp(16px,3.4vw,48px) + 360px)}
+.mini.next{right:calc(clamp(16px,3.4vw,48px) + 380px)}
+@media (max-width:1280px){.mini{display:none}}
+.info{position:absolute;left:clamp(16px,3.4vw,48px);bottom:clamp(24px,5vh,56px);z-index:4;width:min(330px,40vw)}
+.info .role{display:inline-flex;align-items:center;gap:8px;font:400 13px/1 var(--label);letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--cream);padding:9px 12px;border-radius:999px}
+.info .role i{width:8px;height:8px;border-radius:50%;background:var(--stage);box-shadow:0 0 0 2px var(--cream)}
+.info h2{font:400 26px/1.05 var(--label);margin:14px 0 8px;letter-spacing:.01em;text-transform:uppercase}
+.info p{margin:0;font-size:15px;line-height:1.5;font-weight:500;max-width:34ch}
+.ctrl{display:flex;align-items:center;gap:12px;margin-top:18px}
+.round{width:52px;height:52px;border-radius:50%;border:2.5px solid var(--ink);background:transparent;color:var(--ink);display:grid;place-items:center;cursor:pointer;transition:background .2s,color .2s}
+.round:hover{background:var(--ink);color:var(--cream)}
+.round svg{width:20px;height:20px}
+.count{font:400 14px/1 var(--label);letter-spacing:.08em;margin-left:6px;font-variant-numeric:tabular-nums}
+.cta-r{position:absolute;right:clamp(16px,3.4vw,48px);bottom:clamp(24px,5vh,56px);z-index:4;text-align:right}
+.cta-r a{font:400 clamp(30px,3.4vw,50px)/1 var(--display);text-transform:uppercase;text-decoration:none;color:var(--ink);display:inline-flex;align-items:center;gap:12px;letter-spacing:.01em}
+.cta-r a svg{width:.8em;height:.8em;transition:transform .25s}
+.cta-r a:hover svg{transform:translateX(8px)}
+.cta-r small{display:block;font:600 13px/1.4 var(--body);letter-spacing:.04em;margin-top:6px;opacity:.8}
+.dots{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:4;display:flex;gap:6px}
+.dots button{width:44px;height:44px;border:0;background:none;padding:0;cursor:pointer;display:grid;place-items:center}
+.dots button i{display:block;width:22px;height:5px;border-radius:5px;background:rgba(20,10,6,.28);transition:width .3s,background .3s}
+.dots button[aria-current="true"] i{width:38px;background:var(--ink)}
+
+/* ---------- marquee ---------- */
+.ticker{background:var(--gold);color:var(--ink);overflow:hidden;border-block:3px solid var(--ink)}
+.ticker .row{display:flex;gap:42px;width:max-content;padding:14px 0;font:400 clamp(20px,2.2vw,30px)/1 var(--display);text-transform:uppercase;letter-spacing:.02em;animation:tick 32s linear infinite}
+.ticker .row span{display:inline-flex;align-items:center;gap:42px;white-space:nowrap}
+.ticker .row svg{width:22px;height:22px}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ---------- sections ---------- */
+.wrap{width:min(1240px,100% - 32px);margin-inline:auto}
+section{position:relative}
+.eyebrow{font:400 13px/1 var(--label);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.h2{font:400 clamp(54px,8vw,120px)/.9 var(--display);text-transform:uppercase;letter-spacing:.005em}
+.h2 em{font-style:normal;color:var(--pink)}
+.lede{font-size:clamp(17px,1.4vw,20px);color:#E9D9C6;max-width:52ch}
+
+/* video */
+.video{padding:clamp(80px,10vw,150px) 0}
+.video .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,6vw,90px);align-items:center}
+.video .copy{display:flex;flex-direction:column;gap:22px}
+.credits{display:grid;grid-template-columns:auto 1fr;gap:10px 22px;margin:6px 0 0;padding:20px 0 0;border-top:1px solid rgba(255,244,230,.16);font-size:15px}
+.credits dt{font:400 12px/1.8 var(--label);letter-spacing:.12em;text-transform:uppercase;color:#BFA68E}
+.credits dd{margin:0;font-weight:600}
+.player{position:relative;justify-self:center;width:min(420px,100%);aspect-ratio:9/16;border-radius:28px;overflow:hidden;background:#000;box-shadow:0 0 0 6px var(--choc-2),0 0 0 9px var(--gold),0 40px 80px rgba(0,0,0,.55)}
+.player video{width:100%;height:100%;object-fit:cover}
+.player .play{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(180deg,rgba(0,0,0,0) 50%,rgba(0,0,0,.45));border:0;cursor:pointer;color:var(--ink)}
+.player .play b{width:96px;height:96px;border-radius:50%;background:var(--gold);display:grid;place-items:center;box-shadow:0 12px 30px rgba(0,0,0,.4);transition:transform .25s}
+.player .play:hover b{transform:scale(1.08)}
+.player .play svg{width:34px;height:34px;margin-left:6px}
+.player .play span{position:absolute;left:0;right:0;bottom:28px;font:400 14px/1 var(--label);letter-spacing:.12em;color:#fff;text-transform:uppercase}
+.player.is-playing .play{display:none}
+.sticker{position:absolute;z-index:2;right:-18px;top:46px;transform:rotate(8deg);background:var(--pink);color:#fff;font:400 15px/1.1 var(--label);text-transform:uppercase;letter-spacing:.06em;padding:12px 16px;border-radius:12px;box-shadow:0 10px 24px rgba(0,0,0,.35)}
+
+/* collection */
+.collect{padding:clamp(70px,8vw,120px) 0 clamp(90px,10vw,150px);background:linear-gradient(180deg,var(--choc) 0%,#24130B 100%)}
+.collect .head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:clamp(32px,4vw,56px)}
+.shelf{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(12px,1.6vw,22px)}
+.box{--c:#FF4FA3;position:relative;border-radius:22px;padding:14px 14px 18px;background:linear-gradient(180deg,var(--c) 0%,color-mix(in srgb,var(--c) 70%,#000) 100%);color:var(--ink);display:flex;flex-direction:column;gap:10px;box-shadow:0 18px 40px rgba(0,0,0,.4);transform-origin:50% 100%}
+.box .num{display:flex;justify-content:space-between;font:400 12px/1 var(--label);letter-spacing:.1em}
+.box .win{position:relative;height:clamp(240px,24vw,330px);border-radius:16px;background:radial-gradient(80% 60% at 50% 70%,rgba(255,255,255,.55),rgba(255,255,255,.12));box-shadow:inset 0 0 0 2px rgba(255,255,255,.65),inset 0 20px 30px rgba(255,255,255,.25);display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+.box .win::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.5) 0 12%,rgba(255,255,255,0) 22% 60%,rgba(255,255,255,.22) 66%,rgba(255,255,255,0) 74%);pointer-events:none}
+.box .win img{height:94%;width:auto;max-width:none;transition:transform .35s}
+.box:hover .win img{transform:translateY(-6px) scale(1.03)}
+.box h3{font:400 clamp(22px,1.9vw,28px)/1 var(--display);text-transform:uppercase;letter-spacing:.01em}
+.box dl{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:0;font-size:13px}
+.box dt{font:400 11px/1.7 var(--label);letter-spacing:.08em;text-transform:uppercase;opacity:.72}
+.box dd{margin:0;font-weight:800}
+.box button{margin-top:auto;min-height:44px;border-radius:999px;border:2px solid var(--ink);background:transparent;font:400 12px/1 var(--label);letter-spacing:.08em;text-transform:uppercase;color:var(--ink);cursor:pointer}
+.box button:hover{background:var(--ink);color:var(--cream)}
+
+/* drop */
+.drop{padding:clamp(80px,9vw,140px) 0;background:var(--pink);color:var(--ink);overflow:hidden}
+.drop .grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(28px,5vw,80px);align-items:center}
+.drop .machine{justify-self:center;width:min(520px,100%)}
+.drop .h2 em{color:#fff}
+.drop p{font-size:18px;font-weight:500;max-width:46ch;margin:18px 0 26px}
+.form{display:flex;gap:10px;flex-wrap:wrap;max-width:560px}
+.form label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.form input{flex:1 1 260px;min-height:58px;border-radius:999px;border:3px solid var(--ink);background:#FFF4FA;padding:0 24px;font:600 17px var(--body);color:var(--ink)}
+.form input::placeholder{color:#8C5470}
+.form .btn{min-height:58px;padding:0 30px;font-size:15px}
+.form-note{min-height:24px;margin-top:12px;font-weight:700;font-size:15px}
+.perks{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;padding:0;list-style:none}
+.perks li{display:inline-flex;align-items:center;gap:8px;background:rgba(20,10,6,.1);border-radius:999px;padding:8px 14px;font-weight:700;font-size:14px}
+.perks svg{width:16px;height:16px}
+
+/* footer */
+footer{padding:64px 0 40px;background:var(--choc)}
+footer .top{display:flex;justify-content:space-between;align-items:center;gap:28px;flex-wrap:wrap}
+footer .top img{width:min(360px,80vw);height:auto}
+footer nav{display:flex;gap:10px;flex-wrap:wrap}
+footer nav a{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid rgba(255,244,230,.25);text-decoration:none;font:400 13px/1 var(--label);letter-spacing:.06em;text-transform:uppercase}
+footer nav a:hover{border-color:var(--gold);color:var(--gold)}
+footer nav svg{width:16px;height:16px}
+footer .fine{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:40px;padding-top:22px;border-top:1px solid rgba(255,244,230,.12);font-size:13px;color:#BFA68E}
+
+/* ---------- responsive ---------- */
+@media (max-width:980px){
+  .nav ul{display:none}
+  .mini{display:none}
+  .video .grid,.drop .grid{grid-template-columns:1fr}
+  .shelf{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:min(72vw,300px);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:16px;margin-inline:-16px;padding-inline:16px}
+  .box{scroll-snap-align:center}
+  .sticker{right:8px}
+}
+@media (max-width:640px){
+  .stage{height:clamp(640px,100svh,860px)}
+  .giant{white-space:normal;font-size:clamp(78px,25vw,150px);line-height:.84;top:92px;padding-inline:12px}
+  .giant .w{display:block}
+  .giant .sp{display:none}
+  .count{display:none}
+  .figure{height:62%;bottom:15%}
+  .shadow{bottom:14.6%}
+  .info{left:16px;right:16px;width:auto;bottom:74px;display:flex;flex-direction:column}
+  .info h2,.info p{display:none}
+  .info .role{align-self:flex-start}
+  .ctrl{margin-top:10px}
+  .cta-r{right:16px;bottom:88px}
+  .cta-r a{font-size:26px}
+  .cta-r small{display:none}
+  .dots{bottom:10px}
+  .nav .btn{min-height:44px;padding:0 16px;font-size:12px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .ticker .row{animation:none}
+}
+</style>
+</head>
+<body>
+
+<header class="stage" id="top" aria-roledescription="carousel" aria-label="The Candy Shop members">
+  <nav class="nav" aria-label="Main">
+    <a class="brand" href="#top" aria-label="The Candy Shop home"><img src="assets/logo_wrapper.webp" alt="The Candy Shop" width="900" height="301"></a>
+    <ul>
+      <li><a href="#video">Video</a></li>
+      <li><a href="#members">Members</a></li>
+      <li><a href="#drop">The Drop</a></li>
+    </ul>
+    <a class="btn btn-ink" href="#drop">Get the drop
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </nav>
+
+  <div class="giant" id="giant" aria-hidden="true"></div>
+  <div class="shadow" aria-hidden="true"></div>
+  <div class="figure" id="figure"><img id="figImg" src="assets/sugar_dollar.webp" alt="Sugar Dollar, the bear" width="700" height="1500" fetchpriority="high"></div>
+  <button class="mini prev" id="miniPrev" type="button"><img src="assets/candy_cash.webp" alt="" width="603" height="1500"><span>Candy Cash</span></button>
+  <button class="mini next" id="miniNext" type="button"><img src="assets/sweet_money.webp" alt="" width="775" height="1500"><span>Sweet Money</span></button>
+  <div class="floor" aria-hidden="true"></div>
+
+  <div class="info" aria-live="polite">
+    <span class="role"><i aria-hidden="true"></i><span id="role">Singer · The Bear</span></span>
+    <h2 id="name">Sugar Dollar</h2>
+    <p id="blurb">The face of the shop. Full diamond grill, backwards cap and a chain made of dollar signs and sugar cubes.</p>
+    <div class="ctrl">
+      <button class="round" id="prev" type="button" aria-label="Previous member"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
+      <button class="round" id="next" type="button" aria-label="Next member"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      <span class="count" id="count">01 / 05</span>
+    </div>
+  </div>
+  <div class="cta-r">
+    <a href="#video">Watch the video <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    <small>Keep a Business Name · out now</small>
+  </div>
+</header>
+
+<div class="ticker" aria-hidden="true"><div class="row" id="tickRow"></div></div>
+
+<main>
+<section class="video" id="video" aria-labelledby="vidTitle">
+  <div class="wrap grid">
+    <div class="copy reveal">
+      <span class="eyebrow">Now playing · Official video</span>
+      <h2 class="h2" id="vidTitle">Keep a <em>business</em> name</h2>
+      <p class="lede">Sugar Dollar takes the mic in the studio with the whole shop in the room. One verse of advice an OG passed down: protect the name, count the money twice.</p>
+      <dl class="credits">
+        <dt>Artist</dt><dd>Sugar Dollar</dd>
+        <dt>Featuring</dt><dd>Sweet Money, Muva Mula, Cha-Ching, Candy Cash</dd>
+        <dt>Runtime</dt><dd>1:46</dd>
+      </dl>
+      <div><a class="btn btn-gold" href="#drop">Get notified for the next video
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+    </div>
+    <div class="player reveal-card" id="player">
+      <video id="vid" src="assets/keep_a_business_name.mp4" poster="assets/kabn_poster.jpg" playsinline preload="metadata"></video>
+      <button class="play" id="playBtn" type="button" aria-label="Play Keep a Business Name"><b><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></b><span>Play with sound</span></button>
+    </div>
+  </div>
+</section>
+
+<section class="collect" id="members" aria-labelledby="memTitle">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <span class="eyebrow">Collect all 5</span>
+        <h2 class="h2" id="memTitle">Meet the <em>shop</em></h2>
+      </div>
+      <p class="lede">Five members, five flavors. Every one comes boxed, iced out and ready for the shelf.</p>
+    </div>
+    <div class="shelf" id="shelf"></div>
+  </div>
+</section>
+
+<section class="drop" id="drop" aria-labelledby="dropTitle">
+  <div class="wrap grid">
+    <img class="machine reveal" src="assets/logo_gumball.webp" alt="Gold gumball machine full of diamonds and coins, The Candy Shop" width="800" height="446">
+    <div class="reveal">
+      <span class="eyebrow" style="color:var(--ink)">The drop list</span>
+      <h2 class="h2" id="dropTitle">First taste of <em>every</em> drop</h2>
+      <p>New songs, videos and merch go to the list before anywhere else. One email when something drops, nothing else.</p>
+      <form class="form" id="dropForm" name="drop-list" method="POST" data-netlify="true" netlify-honeypot="company">
+        <input type="hidden" name="form-name" value="drop-list">
+        <p style="display:none"><label for="company">Company</label><input id="company" name="company"></p>
+        <label for="email">Email address</label>
+        <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@email.com">
+        <button class="btn btn-ink" type="submit">Join the list
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </form>
+      <div class="form-note" id="formNote" role="status"></div>
+      <ul class="perks">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>Early songs</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="15" height="14" rx="2"/><path d="m17 10 5-3v10l-5-3"/></svg>Video premieres</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.4 7.6 16 3H8L3.6 7.6 6 10l2-1v12h8V9l2 1z"/></svg>Merch first</li>
+      </ul>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="top">
+      <img src="assets/logo_wrapper.webp" alt="The Candy Shop" width="900" height="301" loading="lazy">
+      <nav aria-label="Social">
+        <a href="#top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>Instagram [@HANDLE]</a>
+        <a href="#top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5"/><path d="M14 3c.5 2.7 2.4 4.6 5 5"/></svg>TikTok [@HANDLE]</a>
+        <a href="#top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg>YouTube [@HANDLE]</a>
+      </nav>
+    </div>
+    <div class="fine"><span>&copy; 2026 The Candy Shop. All rights reserved.</span><span>Sugar Dollar · Sweet Money · Candy Cash · Muva Mula · Cha-Ching</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+const M=[
+ {id:"sugar_dollar",name:"Sugar Dollar",animal:"The Bear",role:"Singer",c:"#FF4FA3",d:"#B71C64",flavor:"Milk chocolate",signature:"Dollar-and-sugar-cube chain",
+  blurb:"The face of the shop. Full diamond grill, backwards cap and a chain made of dollar signs and sugar cubes.",w:700},
+ {id:"sweet_money",name:"Sweet Money",animal:"The Wolf",role:"Rapper",c:"#39C3FF",d:"#0B6FA8",flavor:"Blue raspberry ice",signature:"White-gold Cuban link",
+  blurb:"Hype man turned headliner. Grey fur, chrome runners and a white-gold Cuban that never comes off.",w:775},
+ {id:"candy_cash",name:"Candy Cash",animal:"The Bunny",role:"Singer",c:"#FFD23F",d:"#C99300",flavor:"Cherry",signature:"Candy-apple red, head to toe",
+  blurb:"Candy-apple red from the puffer to the thigh-high boots. The sweetest voice in the shop.",w:603},
+ {id:"muva_mula",name:"Muva Mula",animal:"The Jaguar",role:"Rapper",c:"#FF8A1F",d:"#B4500A",flavor:"Mango chili",signature:"Denim on denim",
+  blurb:"The shop's sharpest verses. Denim on denim, gold hoops and a bag that matches the boots.",w:809},
+ {id:"cha_ching",name:"Cha-Ching",animal:"The Panda",role:"Singer",c:"#9B5CFF",d:"#5A2BC2",flavor:"Mint chip",signature:"Iced panda-head chain",
+  blurb:"Smooth vocals, a mint tracksuit, white bucket hat and the iced panda-head chain he never takes off.",w:698}
+];
+const $=s=>document.querySelector(s);
+const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const root=document.documentElement;
+let cur=0,busy=false,timer=null;
+
+/* preload */
+M.forEach(m=>{const i=new Image();i.src=`assets/${m.id}.webp`;});
+
+/* dots, ticker, shelf */
+const star='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.5c.8 5.4 3.6 8.2 10.5 10.5-6.9 2.3-9.7 5.1-10.5 10.5-.8-5.4-3.6-8.2-10.5-10.5C8.4 9.7 11.2 6.9 12 1.5z"/></svg>';
+const tick=M.map(m=>`<span>${m.name}${star}</span>`).join("")+`<span>Keep a Business Name out now${star}</span>`;
+$("#tickRow").innerHTML=tick+tick;
+const shelf=$("#shelf");
+M.forEach((m,i)=>{
+  const a=document.createElement("article");a.className="box";a.style.setProperty("--c",m.c);
+  a.innerHTML=`<div class="num"><span>No. 0${i+1}</span><span>${m.animal}</span></div>
+  <div class="win"><img src="assets/${m.id}.webp" alt="${m.name}, ${m.animal.toLowerCase().replace('the ','the ')}" width="${m.w}" height="1500" loading="lazy"></div>
+  <h3>${m.name}</h3>
+  <dl><dt>Role</dt><dd>${m.role}</dd><dt>Flavor</dt><dd>${m.flavor}</dd><dt>Ice</dt><dd>${m.signature}</dd></dl>
+  <button type="button">Put on stage</button>`;
+  a.querySelector("button").onclick=()=>{go(i,true);document.getElementById("top").scrollIntoView({behavior:reduce?"auto":"smooth"});};
+  shelf.appendChild(a);
+});
+
+function giantHTML(name){return name.split(" ").map(w=>`<span class="w">${[...w].map(ch=>`<span>${ch}</span>`).join("")}</span>`).join('<span class="w sp"></span>');}
+function setStatic(i){
+  const m=M[i],p=M[(i+M.length-1)%M.length],n=M[(i+1)%M.length];
+  root.style.setProperty("--stage",m.c);root.style.setProperty("--stage-deep",m.d);
+  $("#giant").innerHTML=giantHTML(m.name);
+  $("#figImg").src=`assets/${m.id}.webp`;$("#figImg").alt=`${m.name}, ${m.animal.toLowerCase()}`;
+  $("#role").textContent=`${m.role} · ${m.animal}`;$("#name").textContent=m.name;$("#blurb").textContent=m.blurb;
+  $("#count").textContent=`0${i+1} / 0${M.length}`;
+  const mp=$("#miniPrev"),mn=$("#miniNext");
+  mp.querySelector("img").src=`assets/${p.id}.webp`;mp.querySelector("span").textContent=p.name;mp.setAttribute("aria-label",`Show ${p.name}`);
+  mn.querySelector("img").src=`assets/${n.id}.webp`;mn.querySelector("span").textContent=n.name;mn.setAttribute("aria-label",`Show ${n.name}`);
+}
+function go(i,user){
+  i=(i+M.length)%M.length;if(i===cur||busy)return;
+  if(user)restart();
+  const dir=(i>cur||(cur===M.length-1&&i===0))&&!(cur===0&&i===M.length-1)?1:-1;
+  if(reduce){cur=i;setStatic(i);return;}
+  busy=true;
+  const tl=gsap.timeline({onComplete:()=>{busy=false;}});
+  tl.to("#giant span span",{yPercent:-110*dir,opacity:0,duration:.32,stagger:.018,ease:"power2.in"},0)
+    .to("#figure",{x:()=>-260*dir,y:40,rotation:-6*dir,opacity:0,duration:.36,ease:"power2.in"},0)
+    .to([".mini",".info .role","#name","#blurb"],{opacity:0,y:12,duration:.22,ease:"power1.in"},0)
+    .add(()=>{cur=i;setStatic(i);})
+    .fromTo("#giant span span",{yPercent:110*dir,opacity:0},{yPercent:0,opacity:1,duration:.55,stagger:.028,ease:"back.out(1.6)"})
+    .fromTo("#figure",{x:()=>260*dir,y:60,rotation:6*dir,opacity:0,scale:.92},{x:0,y:0,rotation:0,opacity:1,scale:1,duration:.7,ease:"back.out(1.4)"},"<.05")
+    .fromTo([".info .role","#name","#blurb",".mini"],{opacity:0,y:14},{opacity:1,y:0,duration:.4,stagger:.05,ease:"power2.out"},"<.15");
+}
+function restart(){clearInterval(timer);if(!reduce)timer=setInterval(()=>go(cur+1),6500);}
+$("#prev").onclick=()=>go(cur-1,true);$("#next").onclick=()=>go(cur+1,true);
+$("#miniPrev").onclick=()=>go(cur-1,true);$("#miniNext").onclick=()=>go(cur+1,true);
+document.getElementById("top").addEventListener("keydown",e=>{if(e.key==="ArrowRight")go(cur+1,true);if(e.key==="ArrowLeft")go(cur-1,true);});
+let sx=null;const st=document.getElementById("top");
+st.addEventListener("touchstart",e=>{sx=e.touches[0].clientX},{passive:true});
+st.addEventListener("touchend",e=>{if(sx===null)return;const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)go(cur+(dx<0?1:-1),true);sx=null;});
+st.addEventListener("mouseenter",()=>clearInterval(timer));st.addEventListener("mouseleave",restart);
+setStatic(0);restart();
+
+/* intro + idle float */
+if(!reduce){
+  gsap.from("#giant span span",{yPercent:110,opacity:0,duration:.8,stagger:.035,ease:"back.out(1.6)",delay:.1});
+  gsap.from("#figure",{y:120,opacity:0,scale:.9,duration:1,ease:"back.out(1.3)",delay:.25});
+  gsap.to("#figImg",{y:-12,duration:2.4,repeat:-1,yoyo:true,ease:"sine.inOut"});
+  gsap.to(".mini img",{y:-8,duration:2,repeat:-1,yoyo:true,ease:"sine.inOut",stagger:.6});
+}
+
+/* scroll motion: hero parallax, video card tilt-in, boxes stand up, gumball drop */
+if(!reduce&&window.ScrollTrigger){
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.to("#giant",{yPercent:35,ease:"none",scrollTrigger:{trigger:".stage",start:"top top",end:"bottom top",scrub:true}});
+  gsap.to("#figure",{y:-80,ease:"none",scrollTrigger:{trigger:".stage",start:"top top",end:"bottom top",scrub:true}});
+  gsap.fromTo("#player",{rotation:-9,y:60,scale:.9},{rotation:0,y:0,scale:1,ease:"none",scrollTrigger:{trigger:".video",start:"top 85%",end:"center 55%",scrub:.6}});
+  gsap.fromTo(".video .copy > *",{y:40},{y:0,stagger:.08,ease:"power2.out",scrollTrigger:{trigger:".video",start:"top 80%",end:"top 35%",scrub:.6}});
+  gsap.fromTo(".box",{y:90,rotationX:24,transformPerspective:900},{y:0,rotationX:0,stagger:.08,ease:"power2.out",scrollTrigger:{trigger:".shelf",start:"top 92%",end:"top 45%",scrub:.6}});
+  gsap.fromTo(".drop .machine",{y:-120,rotation:-8},{y:0,rotation:0,ease:"bounce.out",scrollTrigger:{trigger:".drop",start:"top 85%",end:"top 30%",scrub:.8}});
+}
+
+/* video */
+const vid=$("#vid"),player=$("#player");
+$("#playBtn").onclick=()=>{vid.controls=true;const p=vid.play();if(p&&p.catch)p.catch(()=>{});player.classList.add("is-playing");};
+vid.addEventListener("ended",()=>{player.classList.remove("is-playing");vid.controls=false;});
+
+/* drop list: works on Netlify; in a preview there is nowhere to send it */
+$("#dropForm").addEventListener("submit",e=>{
+  const note=$("#formNote");
+  if(location.protocol==="file:"||/claude|claudeusercontent|localhost|127\.0\.0\.1/i.test(location.hostname)){
+    e.preventDefault();
+    note.textContent="Preview only: signups start collecting once the site is live on Netlify.";
+  }
+});
+</script>
+</body>
+</html>
