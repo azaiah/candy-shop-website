@@ -12,3 +12,9 @@
   [headers.values]
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Preview card image: let link-preview bots cache it, but refresh within a day if it changes
+[[headers]]
+  for = "/assets/og-card.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"

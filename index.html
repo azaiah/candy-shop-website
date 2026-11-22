@@ -4,8 +4,29 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Candy Shop</title>
-<meta name="description" content="The Candy Shop: Sugar Dollar, Sweet Money, Candy Cash, Muva Mula and Cha-Ching. Watch Keep a Business Name and get first access to every drop.">
+<meta name="description" content="Sugar Dollar, Sweet Money, Candy Cash, Muva Mula and Cha-Ching. Watch the new video Keep a Business Name and get first access to every drop.">
+<link rel="canonical" href="https://the-candy-shop-website.netlify.app/">
+<meta name="theme-color" content="#FF4FA3">
+<!-- Link preview card (iMessage, WhatsApp, Instagram, Facebook, X, Slack, Discord) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="The Candy Shop">
+<meta property="og:url" content="https://the-candy-shop-website.netlify.app/">
+<meta property="og:title" content="The Candy Shop">
+<meta property="og:description" content="Sugar Dollar, Sweet Money, Candy Cash, Muva Mula and Cha-Ching. Watch Keep a Business Name, out now.">
+<meta property="og:image" content="https://the-candy-shop-website.netlify.app/assets/og-card.jpg">
+<meta property="og:image:secure_url" content="https://the-candy-shop-website.netlify.app/assets/og-card.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Candy Shop crew: Muva Mula, Candy Cash, Sugar Dollar, Sweet Money and Cha-Ching under the candy wrapper logo">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://the-candy-shop-website.netlify.app/">
+<meta name="twitter:title" content="The Candy Shop">
+<meta name="twitter:description" content="Watch Keep a Business Name, out now.">
+<meta name="twitter:image" content="https://the-candy-shop-website.netlify.app/assets/og-card.jpg">
+<meta name="twitter:image:alt" content="The Candy Shop crew under the candy wrapper logo">
 <link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Archivo:wght@400;500;600;800&display=swap" rel="stylesheet">
@@ -27,8 +48,10 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--choc);color:var(--cream);font:400 17px/1.55 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
-img,video{max-width:100%;display:block}
+html,body{overflow-x:hidden}
+@supports (overflow:clip){html,body{overflow-x:clip}}
+body{margin:0;background:var(--choc);color:var(--cream);font:400 17px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+img,video{max-width:100%;height:auto;display:block}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
 h1,h2,h3{text-wrap:balance;margin:0}
@@ -106,7 +129,7 @@ section{position:relative}
 .lede{font-size:clamp(17px,1.4vw,20px);color:#E9D9C6;max-width:52ch}
 
 /* video */
-.video{padding:clamp(80px,10vw,150px) 0}
+.video{padding:clamp(80px,10vw,150px) 0;overflow-x:clip}
 .video .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,6vw,90px);align-items:center}
 .video .copy{display:flex;flex-direction:column;gap:22px}
 .credits{display:grid;grid-template-columns:auto 1fr;gap:10px 22px;margin:6px 0 0;padding:20px 0 0;border-top:1px solid rgba(255,244,230,.16);font-size:15px}
@@ -143,11 +166,12 @@ section{position:relative}
 .drop{padding:clamp(80px,9vw,140px) 0;background:var(--pink);color:var(--ink);overflow:hidden}
 .drop .grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(28px,5vw,80px);align-items:center}
 .drop .machine{justify-self:center;width:min(520px,100%)}
+.video .grid>*,.drop .grid>*{min-width:0}
 .drop .h2 em{color:#fff}
 .drop p{font-size:18px;font-weight:500;max-width:46ch;margin:18px 0 26px}
 .form{display:flex;gap:10px;flex-wrap:wrap;max-width:560px}
 .form label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-.form input{flex:1 1 260px;min-height:58px;border-radius:999px;border:3px solid var(--ink);background:#FFF4FA;padding:0 24px;font:600 17px var(--body);color:var(--ink)}
+.form input{flex:1 1 220px;min-width:0;min-height:58px;border-radius:999px;border:3px solid var(--ink);background:#FFF4FA;padding:0 24px;font:600 17px var(--body);color:var(--ink)}
 .form input::placeholder{color:#8C5470}
 .form .btn{min-height:58px;padding:0 30px;font-size:15px}
 .form-note{min-height:24px;margin-top:12px;font-weight:700;font-size:15px}
@@ -169,18 +193,22 @@ footer .fine{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
 @media (max-width:980px){
   .nav ul{display:none}
   .mini{display:none}
-  .video .grid,.drop .grid{grid-template-columns:1fr}
+  .video .grid,.drop .grid{grid-template-columns:minmax(0,1fr)}
+  .drop .machine{width:min(360px,82%)}
   .shelf{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:min(72vw,300px);overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:16px;margin-inline:-16px;padding-inline:16px}
   .box{scroll-snap-align:center}
   .sticker{right:8px}
 }
-@media (max-width:640px){
-  .stage{height:clamp(640px,100svh,860px)}
-  .giant{white-space:normal;font-size:clamp(78px,25vw,150px);line-height:.84;top:92px;padding-inline:12px}
+/* stacked hero: phones, and tablets held upright */
+@media (max-width:640px), (max-width:1100px) and (orientation:portrait){
+  .stage{height:clamp(600px,100svh,1180px)}
+  .nav ul{display:none}
+  .mini{display:none}
+  .giant{white-space:normal;font-size:clamp(78px,25vw,210px);line-height:.84;top:92px;padding-inline:12px}
   .giant .w{display:block}
   .giant .sp{display:none}
   .count{display:none}
-  .figure{height:62%;bottom:15%}
+  .figure{height:57%;bottom:15%}
   .shadow{bottom:14.6%}
   .info{left:16px;right:16px;width:auto;bottom:74px;display:flex;flex-direction:column}
   .info h2,.info p{display:none}
@@ -191,6 +219,46 @@ footer .fine{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
   .cta-r small{display:none}
   .dots{bottom:10px}
   .nav .btn{min-height:44px;padding:0 16px;font-size:12px}
+}
+@media (min-width:641px) and (max-width:1100px) and (orientation:portrait){
+  .info{bottom:96px;left:32px}
+  .cta-r{bottom:104px;right:32px}
+  .cta-r a{font-size:42px}
+  .round{width:60px;height:60px}
+  .info .role{font-size:15px;padding:11px 15px}
+  .figure{height:60%;bottom:16%}
+}
+@media (max-width:400px){
+  .nav{padding:14px 14px}
+  .nav .brand img{width:122px}
+  .nav .btn{padding:0 13px;font-size:11px;gap:6px}
+  .cta-r a{font-size:22px}
+  .round{width:46px;height:46px}
+  .ctrl{gap:8px}
+}
+/* tablets and small laptops held sideways */
+@media (min-width:641px) and (max-width:1100px) and (orientation:landscape){
+  .info p{display:none}
+  .info{width:min(260px,30vw)}
+}
+/* phones held sideways: short screens */
+@media (orientation:landscape) and (max-height:560px){
+  .stage{height:max(100svh,340px)}
+  .nav{padding:10px 16px}
+  .nav ul{display:none}
+  .nav .brand img{width:128px}
+  .giant{top:56px;white-space:nowrap;font-size:clamp(56px,24vh,130px)}
+  .giant .w{display:inline-block}
+  .giant .sp{display:inline-block}
+  .figure{height:82%;bottom:-4%}
+  .shadow{display:none}
+  .mini{display:none}
+  .info{bottom:14px;left:16px;width:auto}
+  .info h2,.info p{display:none}
+  .ctrl{margin-top:8px}
+  .cta-r{bottom:18px;right:16px}
+  .cta-r small{display:none}
+  .cta-r a{font-size:26px}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -352,10 +420,22 @@ M.forEach((m,i)=>{
 });
 
 function giantHTML(name){return name.split(" ").map(w=>`<span class="w">${[...w].map(ch=>`<span>${ch}</span>`).join("")}</span>`).join('<span class="w sp"></span>');}
+function fitGiant(){
+  const g=$("#giant");g.style.fontSize="";
+  const words=[...g.querySelectorAll(".w:not(.sp)")];if(!words.length)return;
+  const avail=g.clientWidth-28;
+  const stacked=getComputedStyle(words[0]).display==="block";
+  const ww=words.map(w=>[...w.children].reduce((t,c)=>t+c.offsetWidth,0));
+  const sp=g.querySelector(".sp");
+  const need=stacked?Math.max(...ww):ww.reduce((x,y)=>x+y,0)+(words.length-1)*(sp?sp.offsetWidth:0);
+  if(need>avail)g.style.fontSize=(parseFloat(getComputedStyle(g).fontSize)*avail/need)+"px";
+}
+let rz=0;window.addEventListener("resize",()=>{cancelAnimationFrame(rz);rz=requestAnimationFrame(fitGiant);});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitGiant);
 function setStatic(i){
   const m=M[i],p=M[(i+M.length-1)%M.length],n=M[(i+1)%M.length];
   root.style.setProperty("--stage",m.c);root.style.setProperty("--stage-deep",m.d);
-  $("#giant").innerHTML=giantHTML(m.name);
+  $("#giant").innerHTML=giantHTML(m.name);fitGiant();
   $("#figImg").src=`assets/${m.id}.webp`;$("#figImg").alt=`${m.name}, ${m.animal.toLowerCase()}`;
   $("#role").textContent=`${m.role} · ${m.animal}`;$("#name").textContent=m.name;$("#blurb").textContent=m.blurb;
   $("#count").textContent=`0${i+1} / 0${M.length}`;
