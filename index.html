@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Candy Shop</title>
-<meta name="description" content="Sugar Dollar, Sweet Money, Candy Cash, Muva Mula and Cha-Ching. Watch the new video Keep a Business Name and get first access to every drop.">
+<meta name="description" content="Sugar Dollar, Sweet Money, Candy Cash, Muva Mula and Cha-Ching. Watch the new drop Mario Kart and get first access to every drop.">
 <link rel="canonical" href="https://the-candy-shop-website.netlify.app/">
 <meta name="theme-color" content="#FF4FA3">
 <!-- Link preview card (iMessage, WhatsApp, Instagram, Facebook, X, Slack, Discord) -->
@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="The Candy Shop">
 <meta property="og:url" content="https://the-candy-shop-website.netlify.app/">
 <meta property="og:title" content="The Candy Shop">
-<meta property="og:description" content="Sugar Dollar, Sweet Money, Candy Cash, Muva Mula and Cha-Ching. Watch Keep a Business Name, out now.">
+<meta property="og:description" content="Sugar Dollar, Sweet Money, Candy Cash, Muva Mula and Cha-Ching. Watch the new drop Mario Kart, out now.">
 <meta property="og:image" content="https://the-candy-shop-website.netlify.app/assets/og-card.jpg">
 <meta property="og:image:secure_url" content="https://the-candy-shop-website.netlify.app/assets/og-card.jpg">
 <meta property="og:image:type" content="image/jpeg">
@@ -22,7 +22,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:url" content="https://the-candy-shop-website.netlify.app/">
 <meta name="twitter:title" content="The Candy Shop">
-<meta name="twitter:description" content="Watch Keep a Business Name, out now.">
+<meta name="twitter:description" content="Watch the new drop Mario Kart, out now.">
 <meta name="twitter:image" content="https://the-candy-shop-website.netlify.app/assets/og-card.jpg">
 <meta name="twitter:image:alt" content="The Candy Shop crew under the candy wrapper logo">
 <link rel="icon" type="image/png" href="assets/favicon.png">
@@ -147,6 +147,13 @@ section{position:relative}
 .player .play svg{width:34px;height:34px;margin-left:6px}
 .player .play span{position:absolute;left:0;right:0;bottom:28px;font:400 14px/1 var(--label);letter-spacing:.12em;color:#fff;text-transform:uppercase}
 .player.is-playing .play{display:none}
+.player.is-playing .sticker{display:none}
+.player #newSticker{right:14px;top:16px;transform:rotate(6deg)}
+.vtabs{display:flex;flex-wrap:wrap;gap:10px}
+.vtab{min-height:44px;padding:0 18px;border-radius:999px;border:2px solid rgba(255,244,230,.35);background:transparent;color:var(--cream);font:400 13px/1 var(--label);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .2s,color .2s,border-color .2s}
+.vtab:hover{border-color:var(--gold)}
+.vtab[aria-selected="true"]{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.vtab i{font-style:normal;background:var(--pink);color:#fff;border-radius:6px;padding:4px 6px;font-size:11px}
 .sticker{position:absolute;z-index:2;right:-18px;top:46px;transform:rotate(8deg);background:var(--pink);color:#fff;font:400 15px/1.1 var(--label);text-transform:uppercase;letter-spacing:.06em;padding:12px 16px;border-radius:12px;box-shadow:0 10px 24px rgba(0,0,0,.35)}
 
 /* collection */
@@ -303,7 +310,7 @@ footer .fine{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
   </div>
   <div class="cta-r">
     <a href="#video">Watch the video <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-    <small>Keep a Business Name · out now</small>
+    <small>Mario Kart · new drop</small>
   </div>
 </header>
 
@@ -313,20 +320,25 @@ footer .fine{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
 <section class="video" id="video" aria-labelledby="vidTitle">
   <div class="wrap grid">
     <div class="copy reveal">
-      <span class="eyebrow">Now playing · Official video</span>
-      <h2 class="h2" id="vidTitle">Keep a <em>business</em> name</h2>
-      <p class="lede">Sugar Dollar takes the mic in the studio with the whole shop in the room. One verse of advice an OG passed down: protect the name, count the money twice.</p>
+      <div class="vtabs" role="tablist" aria-label="Videos">
+        <button type="button" role="tab" class="vtab" data-v="0" aria-selected="true">Mario Kart <i>New</i></button>
+        <button type="button" role="tab" class="vtab" data-v="1" aria-selected="false">Keep a Business Name</button>
+      </div>
+      <span class="eyebrow" id="vidEyebrow">New drop · Official video</span>
+      <h2 class="h2" id="vidTitle">Mario <em>Kart</em></h2>
+      <p class="lede" id="vidLede">Sweet Money takes the wheel and the whole shop rides with him: go-karts through a neon candy city, the Candy Car Wash, and a post-up at the Candy Shop gas station.</p>
       <dl class="credits">
-        <dt>Artist</dt><dd>Sugar Dollar</dd>
-        <dt>Featuring</dt><dd>Sweet Money, Muva Mula, Cha-Ching, Candy Cash</dd>
-        <dt>Runtime</dt><dd>1:46</dd>
+        <dt>Artist</dt><dd id="vidArtist">Sweet Money</dd>
+        <dt>Featuring</dt><dd id="vidFeat">Sugar Dollar, Candy Cash, Muva Mula, Cha-Ching</dd>
+        <dt>Runtime</dt><dd id="vidTime">2:26</dd>
       </dl>
       <div><a class="btn btn-gold" href="#drop">Get notified for the next video
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
     </div>
     <div class="player reveal-card" id="player">
-      <video id="vid" src="assets/keep_a_business_name.mp4" poster="assets/kabn_poster.jpg" playsinline preload="metadata"></video>
-      <button class="play" id="playBtn" type="button" aria-label="Play Keep a Business Name"><b><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></b><span>Play with sound</span></button>
+      <span class="sticker" id="newSticker">New drop</span>
+      <video id="vid" src="assets/mario_kart.mp4" poster="assets/mario_kart_poster.jpg" playsinline preload="metadata"></video>
+      <button class="play" id="playBtn" type="button" aria-label="Play Mario Kart"><b><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></b><span>Play with sound</span></button>
     </div>
   </div>
 </section>
@@ -409,7 +421,7 @@ M.forEach(m=>{const i=new Image();i.src=`assets/${m.id}.webp`;});
 
 /* dots, ticker, shelf */
 const star='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.5c.8 5.4 3.6 8.2 10.5 10.5-6.9 2.3-9.7 5.1-10.5 10.5-.8-5.4-3.6-8.2-10.5-10.5C8.4 9.7 11.2 6.9 12 1.5z"/></svg>';
-const tick=M.map(m=>`<span>${m.name}${star}</span>`).join("")+`<span>Keep a Business Name out now${star}</span>`;
+const tick=M.map(m=>`<span>${m.name}${star}</span>`).join("")+`<span>New drop: Mario Kart${star}</span><span>Keep a Business Name out now${star}</span>`;
 $("#tickRow").innerHTML=tick+tick;
 const shelf=$("#shelf");
 M.forEach((m,i)=>{
@@ -495,6 +507,22 @@ if(!reduce&&window.ScrollTrigger){
 const vid=$("#vid"),player=$("#player");
 $("#playBtn").onclick=()=>{vid.controls=true;const p=vid.play();if(p&&p.catch)p.catch(()=>{});player.classList.add("is-playing");};
 vid.addEventListener("ended",()=>{player.classList.remove("is-playing");vid.controls=false;});
+const VIDS=[
+  {src:"assets/mario_kart.mp4",poster:"assets/mario_kart_poster.jpg",eyebrow:"New drop · Official video",title:"Mario <em>Kart</em>",name:"Mario Kart",
+   lede:"Sweet Money takes the wheel and the whole shop rides with him: go-karts through a neon candy city, the Candy Car Wash, and a post-up at the Candy Shop gas station.",
+   artist:"Sweet Money",feat:"Sugar Dollar, Candy Cash, Muva Mula, Cha-Ching",time:"2:26",isNew:true},
+  {src:"assets/keep_a_business_name.mp4",poster:"assets/kabn_poster.jpg",eyebrow:"Official video",title:"Keep a <em>business</em> name",name:"Keep a Business Name",
+   lede:"Sugar Dollar takes the mic in the studio with the whole shop in the room. One verse of advice an OG passed down: protect the name, count the money twice.",
+   artist:"Sugar Dollar",feat:"Sweet Money, Muva Mula, Cha-Ching, Candy Cash",time:"1:46",isNew:false}];
+document.querySelectorAll(".vtab").forEach(b=>b.addEventListener("click",()=>{
+  const v=VIDS[+b.dataset.v];
+  document.querySelectorAll(".vtab").forEach(x=>x.setAttribute("aria-selected",x===b?"true":"false"));
+  vid.pause();vid.controls=false;player.classList.remove("is-playing");
+  vid.src=v.src;vid.poster=v.poster;vid.load();
+  $("#vidEyebrow").textContent=v.eyebrow;$("#vidTitle").innerHTML=v.title;$("#vidLede").textContent=v.lede;
+  $("#vidArtist").textContent=v.artist;$("#vidFeat").textContent=v.feat;$("#vidTime").textContent=v.time;
+  $("#newSticker").style.visibility=v.isNew?"visible":"hidden";$("#playBtn").setAttribute("aria-label","Play "+v.name);
+}));
 
 /* drop list: works on Netlify; in a preview there is nowhere to send it */
 $("#dropForm").addEventListener("submit",e=>{
