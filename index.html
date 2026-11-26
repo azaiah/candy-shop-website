@@ -135,6 +135,10 @@ section{position:relative}
 .credits{display:grid;grid-template-columns:auto 1fr;gap:10px 22px;margin:6px 0 0;padding:20px 0 0;border-top:1px solid rgba(255,244,230,.16);font-size:15px}
 .credits dt{font:400 12px/1.8 var(--label);letter-spacing:.12em;text-transform:uppercase;color:#BFA68E}
 .credits dd{margin:0;font-weight:600}
+.credits dt.wr{color:var(--pink);align-self:center}
+.credits dd.wr{font:400 clamp(24px,2.2vw,32px)/1.1 var(--display);text-transform:uppercase;letter-spacing:.01em;color:var(--cream);display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.credits dd.wr a{font:600 14px/1 var(--body);text-transform:none;letter-spacing:0;color:var(--pink);text-decoration:none;border-bottom:1px solid currentColor;padding:6px 0}
+.credits dd.wr a:hover{color:var(--gold)}
 .player{position:relative;justify-self:center;width:min(420px,100%);aspect-ratio:9/16;border-radius:28px;overflow:hidden;background:#000;box-shadow:0 0 0 6px var(--choc-2),0 0 0 9px var(--gold),0 40px 80px rgba(0,0,0,.55)}
 .player video{width:100%;height:100%;object-fit:contain;background:#000}
 /* full screen: show the whole 9:16 video with bars at the sides, never cropped */
@@ -330,7 +334,10 @@ footer .fine{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
       <dl class="credits">
         <dt>Artist</dt><dd id="vidArtist">Sweet Money</dd>
         <dt>Featuring</dt><dd id="vidFeat">Sugar Dollar, Candy Cash, Muva Mula, Cha-Ching</dd>
-        <dt>Runtime</dt><dd id="vidTime">2:26</dd>
+        <dt>Runtime</dt><dd id="vidTime">2:31</dd>
+        <dt class="wr">Written by</dt><dd class="wr">Jalen Rufus <a href="https://www.instagram.com/thebeatsnarrator/" target="_blank" rel="noopener">@thebeatsnarrator</a></dd>
+        <dt>Created &amp; directed by</dt><dd>Azaiah Wood</dd>
+        <dt>Animated by</dt><dd>Gedji</dd>
       </dl>
       <div><a class="btn btn-gold" href="#drop">Get notified for the next video
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
@@ -510,7 +517,7 @@ vid.addEventListener("ended",()=>{player.classList.remove("is-playing");vid.cont
 const VIDS=[
   {src:"assets/mario_kart.mp4",poster:"assets/mario_kart_poster.jpg",eyebrow:"New drop · Official video",title:"Mario <em>Kart</em>",name:"Mario Kart",
    lede:"Sweet Money takes the wheel and the whole shop rides with him: go-karts through a neon candy city, the Candy Car Wash, and a post-up at the Candy Shop gas station.",
-   artist:"Sweet Money",feat:"Sugar Dollar, Candy Cash, Muva Mula, Cha-Ching",time:"2:26",isNew:true},
+   artist:"Sweet Money",feat:"Sugar Dollar, Candy Cash, Muva Mula, Cha-Ching",time:"2:31",isNew:true},
   {src:"assets/keep_a_business_name.mp4",poster:"assets/kabn_poster.jpg",eyebrow:"Official video",title:"Keep a <em>business</em> name",name:"Keep a Business Name",
    lede:"Sugar Dollar takes the mic in the studio with the whole shop in the room. One verse of advice an OG passed down: protect the name, count the money twice.",
    artist:"Sugar Dollar",feat:"Sweet Money, Muva Mula, Cha-Ching, Candy Cash",time:"1:46",isNew:false}];
